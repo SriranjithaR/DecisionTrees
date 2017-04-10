@@ -7,12 +7,11 @@ Created on Sat Apr 08 18:00:03 2017
 import numpy as np
 from decisionTree import decisionTree, getTree, testDT, prediction, split, giniGain, splitOnFeature, findNextSplit, getLeafClass
 
-def bagging(trainfv, testfv, maxDepth, minRows):
+def bagging(trainfv, testfv, maxDepth=10, minRows=10, numTrees=50):
     
     train = np.array(trainfv)
     predVals = np.zeros(len(testfv))
     
-    numTrees = 50
     for iter in range(numTrees): # for 50 iterations
         indices = np.random.choice(np.arange(train.shape[0]),train.shape[0])
         trainBag = np.take(train, indices, 0)

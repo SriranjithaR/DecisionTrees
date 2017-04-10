@@ -92,5 +92,5 @@ if(x1 == 0):
     print "YEP"
 
 f = open("temp.txt","a+")
-f.write(str(sarr))
+f.write("hey"+ str(sarr))
 f.close();

@@ -9,6 +9,7 @@ from decisionTree import decisionTree
 from randomForest import randomForest
 from bagging import bagging
 import math
+from svm import svm
 #from plot import plot
 
 class analysis:
@@ -25,33 +26,13 @@ class analysis:
         f.close()
         
 
-
-    def getPlots(self):
+     
+    def changeRatioWords(self, ratios, words):
         
         # Get data as array
         train = getLines(self.trainData, 100)
         
-        """
-         words is now a list of (word,frequency) tuples, ordered by descending order
-         of frequency
-         
-         wordList is a list of all unique words in the training data
-        """   
-        
-        
-        """
-         The 100 most frequent words have been removed from words
-         
-         wordList is now a list of the words in desc order of frequency
-        """
-        
-        cv = [] 
-        #cv = [[[0 for z in range(4001)] for y in range(200)] for x in range(10)]
-        #cv = np.array(cv);
-        #trainfv = np.array(trainfv)
-        
-        #np.random.shuffle(trainfv)
-        
+        cv = []         
         train = np.array(train)
         np.random.shuffle(train)
         
@@ -62,51 +43,347 @@ class analysis:
         zoltempdt = [0 for xtemp in range(10)]
         zoltemprf = [0 for xtemp in range(10)]
         zoltempbag = [0 for xtemp in range(10)]
+        zoltempsvm = [0 for xtemp in range(10)]
         
-        n = len(train)
-        #ratios = [0.01,0.03]
-        #it = 2
         it = 10
-        ratios = [0.025, 0.05, 0.125, 0.25]
+        
         avgzoldt  = [0 for xtemp in range(len(ratios))]
         avgzolrf = [0 for xtemp in range(len(ratios))]
         avgzolbag = [0 for xtemp in range(len(ratios))]
+        avgzolsvm = [0 for xtemp in range(len(ratios))]
         
         stddevzoldt  = [0 for xtemp in range(len(ratios))]
         stddevzolrf = [0 for xtemp in range(len(ratios))]
         stddevzolbag = [0 for xtemp in range(len(ratios))]
+        stddevzolsvm = [0 for xtemp in range(len(ratios))]
         
         stderrzoldt  = [0 for xtemp in range(len(ratios))]
         stderrzolrf = [0 for xtemp in range(len(ratios))]
         stderrzolbag = [0 for xtemp in range(len(ratios))]
+        stderrzolsvm = [0 for xtemp in range(len(ratios))]
         
                      
         testnew = []
         trainnew = []
         
-        
-        #print "Starting "
-        for r in range(len(ratios)):
-            print "ration : ",r
+
+        for w in words:
+            for r in range(len(ratios)):
+                print "ration : ",r
+                
+                for i in range(it):
+                    trainnew = []
+                    testnew = cv[i]
             
+                    for j in range(it):
+                        if j != i:
+                            for k in range(200):
+                                trainnew.append(cv[j][k])
+
+                    temptrain = trainnew
+                    trainDataset  = getTrainData(temptrain, ratios[r])
+       
+                    
+                    
+                    rid_train,x_train,y_train = splitColumns(trainDataset);
+                    rid_test,x_test,y_test = splitColumns(testnew);
+                    
+                    # Pre-processing data
+                    x_train = preprocess(x_train)
+                    x_test = preprocess(x_test)
+                    
+                    # Creating dictionary from x_train
+                    words,wordList = getWordList(x_train)
+                    
+                    # Removing most frequent 100 words
+                    for _ in range(100):
+                        words.pop(0)
+                        
+                    wordList = [x for x,_ in words]
+                    
+                    # Forming feature vector, calculating Conditional probabilities, applying bag
+                    trainfv, trainfv0, trainfv1  = featureVector(wordList[:w], x_train, y_train)
+                    testfv, testfv0, testfv1 = featureVector(wordList[:w], x_test, y_test)
+                   
+                
+                    zoltempdt[i] = decisionTree(trainfv,testfv)  
+                    zoltemprf[i] = randomForest(trainfv,testfv)   
+                    zoltempbag[i] = bagging(trainfv,testfv)      
+                    zoltempsvm[i] = svm(trainfv,testfv)   
+                    
+                avgzoldt[r]  = np.mean(zoltempdt)
+                avgzolrf[r] = np.mean(zoltemprf)
+                avgzolbag[r] = np.mean(zoltempbag)
+                avgzolsvm[r] = np.mean(zoltempsvm)
+                  
+                stddevzoldt[r]  = np.std(zoltempdt)
+                stddevzolrf[r]  = np.std(zoltemprf)
+                stddevzolbag[r]  = np.std(zoltempbag)
+                stddevzolsvm[r]  = np.std(zoltempsvm)
+                
+                stderrzoldt[r] = stddevzoldt[r]/math.sqrt(it)
+                stderrzolrf[r] = stddevzolrf[r]/math.sqrt(it)
+                stderrzolbag[r] = stddevzolbag[r]/math.sqrt(it)
+                stderrzolsvm[r] = stddevzolsvm[r]/math.sqrt(it)
+            
+
+        
+            print avgzoldt
+            print avgzolrf
+            print avgzolbag
+            print avgzolsvm
+            
+            print stddevzoldt
+            print stddevzolrf
+            print stddevzolbag
+            print stddevzolsvm
+    
+            print stderrzoldt
+            print stderrzolrf
+            print stderrzolbag 
+            print stderrzolsvm   
+    
+            f = open(self.file,"a+");
+            f.write("\n No. of words : ")
+            f.write(str(w))
+            f.write("\n AVERAGE ZERO ONE LOSS")
+            f.write("\n 1. Decision Tree")
+            f.write(str(avgzoldt))
+            f.write("\n 2. Bagging")
+            f.write(str(avgzolbag))
+            f.write("\n 3. Random forest")
+            f.write(str(avgzolrf))
+            f.write("\n 4. SVM")
+            f.write(str(avgzolsvm))
+            
+            f.write("\n STANDARD DEVIATION ZERO ONE LOSS")
+            f.write("\n 1. Decision Tree")
+            f.write(str(stddevzoldt))     
+            f.write("\n 2. Bagging")
+            f.write(str(stddevzolbag))        
+            f.write("\n 3. Random forest")
+            f.write(str(stddevzolrf))        
+            f.write("\n 4. SVM")
+            f.write(str(stddevzolsvm))
+            
+            f.write("\n STANDARD ERROR ZERO ONE LOSS")
+            f.write("\n 1. Decision Tree")
+            f.write(str(stderrzoldt))       
+            f.write("\n 2. Bagging")
+            f.write(str(stderrzolbag))        
+            f.write("\n 3. Random forest")
+            f.write(str(stderrzolrf))       
+            f.write("\n 4. SVM")
+            f.write(str(stderrzolsvm))
+            f.close();
+    
+    def changeNumTrees(self, numTrees):
+        
+        # Get data as array
+        train = getLines(self.trainData, 100)
+        
+        cv = []         
+        train = np.array(train)
+        np.random.shuffle(train)
+        
+        for i in range(10):
+            cv.append(train[i*200:(i+1)*200])
+        
+        
+        zoltempdt = [0 for xtemp in range(10)]
+        zoltemprf = [0 for xtemp in range(10)]
+        zoltempbag = [0 for xtemp in range(10)]
+        zoltempsvm = [0 for xtemp in range(10)]
+        
+        ratios = [0.25]
+        w = 1000
+        it = 10
+        
+        avgzoldt  = [0 for xtemp in range(len(ratios))]
+        avgzolrf = [0 for xtemp in range(len(ratios))]
+        avgzolbag = [0 for xtemp in range(len(ratios))]
+        avgzolsvm = [0 for xtemp in range(len(ratios))]
+        
+        stddevzoldt  = [0 for xtemp in range(len(ratios))]
+        stddevzolrf = [0 for xtemp in range(len(ratios))]
+        stddevzolbag = [0 for xtemp in range(len(ratios))]
+        stddevzolsvm = [0 for xtemp in range(len(ratios))]
+        
+        stderrzoldt  = [0 for xtemp in range(len(ratios))]
+        stderrzolrf = [0 for xtemp in range(len(ratios))]
+        stderrzolbag = [0 for xtemp in range(len(ratios))]
+        stderrzolsvm = [0 for xtemp in range(len(ratios))]
+        
+                     
+        testnew = []
+        trainnew = []
+        
+
+        for num in numTrees:
+            for r in range(len(ratios)):
+                
+                for i in range(it):
+                    trainnew = []
+                    testnew = cv[i]
+            
+                    for j in range(it):
+                        if j != i:
+                            for k in range(200):
+                                trainnew.append(cv[j][k])
+
+                    temptrain = trainnew
+                    trainDataset  = getTrainData(temptrain, ratios[r])
+       
+                    
+                    
+                    rid_train,x_train,y_train = splitColumns(trainDataset);
+                    rid_test,x_test,y_test = splitColumns(testnew);
+                    
+                    # Pre-processing data
+                    x_train = preprocess(x_train)
+                    x_test = preprocess(x_test)
+                    
+                    # Creating dictionary from x_train
+                    words,wordList = getWordList(x_train)
+                    
+                    # Removing most frequent 100 words
+                    for _ in range(100):
+                        words.pop(0)
+                        
+                    wordList = [x for x,_ in words]
+                    
+                    # Forming feature vector, calculating Conditional probabilities, applying bag
+                    trainfv, trainfv0, trainfv1  = featureVector(wordList[:w], x_train, y_train)
+                    testfv, testfv0, testfv1 = featureVector(wordList[:w], x_test, y_test)
+                   
+                
+#                    zoltempdt[i] = decisionTree(trainfv,testfv)  
+                    zoltemprf[i] = randomForest(trainfv,testfv,10,10,num)   
+                    zoltempbag[i] = bagging(trainfv,testfv,10,10,num)      
+#                    zoltempsvm[i] = svm(trainfv,testfv)   
+                    
+                avgzoldt[r]  = np.mean(zoltempdt)
+                avgzolrf[r] = np.mean(zoltemprf)
+                avgzolbag[r] = np.mean(zoltempbag)
+                avgzolsvm[r] = np.mean(zoltempsvm)
+                  
+                stddevzoldt[r]  = np.std(zoltempdt)
+                stddevzolrf[r]  = np.std(zoltemprf)
+                stddevzolbag[r]  = np.std(zoltempbag)
+                stddevzolsvm[r]  = np.std(zoltempsvm)
+                
+                stderrzoldt[r] = stddevzoldt[r]/math.sqrt(it)
+                stderrzolrf[r] = stddevzolrf[r]/math.sqrt(it)
+                stderrzolbag[r] = stddevzolbag[r]/math.sqrt(it)
+                stderrzolsvm[r] = stddevzolsvm[r]/math.sqrt(it)
+            
+
+        
+#            print avgzoldt
+            print avgzolrf
+            print avgzolbag
+#            print avgzolsvm
+            
+#            print stddevzoldt
+            print stddevzolrf
+            print stddevzolbag
+#            print stddevzolsvm
+    
+#            print stderrzoldt
+            print stderrzolrf
+            print stderrzolbag 
+#            print stderrzolsvm   
+    
+            f = open(self.file,"a+");
+            f.write("\n No. of trees : " +  str(num))
+            f.write("\n AVERAGE ZERO ONE LOSS")
+#            f.write("\n 1. Decision Tree")
+#            f.write(str(avgzoldt))
+            f.write("\n 1. Bagging")
+            f.write(str(avgzolbag))
+            f.write("\n 2. Random forest")
+            f.write(str(avgzolrf))
+#            f.write("\n 4. SVM")
+#            f.write(str(avgzolsvm))
+            
+            f.write("\n STANDARD DEVIATION ZERO ONE LOSS")
+#            f.write("\n 1. Decision Tree")
+#            f.write(str(stddevzoldt))     
+            f.write("\n 1. Bagging")
+            f.write(str(stddevzolbag))        
+            f.write("\n 2. Random forest")
+            f.write(str(stddevzolrf))        
+#            f.write("\n 4. SVM")
+#            f.write(str(stddevzolsvm))
+            
+            f.write("\n STANDARD ERROR ZERO ONE LOSS")
+#            f.write("\n 1. Decision Tree")
+#            f.write(str(stderrzoldt))       
+            f.write("\n 1. Bagging")
+            f.write(str(stderrzolbag))        
+            f.write("\n 2. Random forest")
+            f.write(str(stderrzolrf))       
+#            f.write("\n 4. SVM")
+#            f.write(str(stderrzolsvm))
+            f.close();
+            
+    
+    def changeDepth(self, depths):
+        
+        # Get data as array
+        train = getLines(self.trainData, 100)
+        
+        cv = []         
+        train = np.array(train)
+        np.random.shuffle(train)
+        
+        for i in range(10):
+            cv.append(train[i*200:(i+1)*200])
+        
+        
+        zoltempdt = [0 for xtemp in range(10)]
+        zoltemprf = [0 for xtemp in range(10)]
+        zoltempbag = [0 for xtemp in range(10)]
+        zoltempsvm = [0 for xtemp in range(10)]
+        
+        ratios = [0.25]
+        w = 1000
+        it = 10
+        
+        avgzoldt  = [0 for xtemp in range(len(ratios))]
+        avgzolrf = [0 for xtemp in range(len(ratios))]
+        avgzolbag = [0 for xtemp in range(len(ratios))]
+        avgzolsvm = [0 for xtemp in range(len(ratios))]
+        
+        stddevzoldt  = [0 for xtemp in range(len(ratios))]
+        stddevzolrf = [0 for xtemp in range(len(ratios))]
+        stddevzolbag = [0 for xtemp in range(len(ratios))]
+        stddevzolsvm = [0 for xtemp in range(len(ratios))]
+        
+        stderrzoldt  = [0 for xtemp in range(len(ratios))]
+        stderrzolrf = [0 for xtemp in range(len(ratios))]
+        stderrzolbag = [0 for xtemp in range(len(ratios))]
+        stderrzolsvm = [0 for xtemp in range(len(ratios))]
+        
+                     
+        testnew = []
+        trainnew = []
+        
+
+        for depth in depths:
+                
             for i in range(it):
-                # print "CV step ",i
                 trainnew = []
                 testnew = cv[i]
-                # print "test data shape : ",testfvnew.shape
         
                 for j in range(it):
                     if j != i:
                         for k in range(200):
                             trainnew.append(cv[j][k])
-        #                    print len(trainnew), "i : ",i,"j : ",j
-        
-                # print "Trainfvnew shape : ", trainfvnew.shape
+
                 temptrain = trainnew
-        #        temptrain = np.array(temptrain)
-        #        print temptrain.shape
-                trainDataset  = getTrainData(temptrain, ratios[r])
-                # print "Train data shape : ",trainDataset.shape
+                trainDataset  = getTrainData(temptrain, 0.25)
+   
                 
                 
                 rid_train,x_train,y_train = splitColumns(trainDataset);
@@ -126,63 +403,110 @@ class analysis:
                 wordList = [x for x,_ in words]
                 
                 # Forming feature vector, calculating Conditional probabilities, applying bag
-                trainfv, trainfv0, trainfv1  = featureVector(wordList[:1000], x_train, y_train)
-                testfv, testfv0, testfv1 = featureVector(wordList[:1000], x_test, y_test)
+                trainfv, trainfv0, trainfv1  = featureVector(wordList[:w], x_train, y_train)
+                testfv, testfv0, testfv1 = featureVector(wordList[:w], x_test, y_test)
                
             
-                zoltempdt[i] = decisionTree(trainfv,testfv)  
-#                zoltemprf[i] = randomForest(trainfv,testfv)   
-#                zoltempbag[i] = bagging(trainfv,testfv)   
-                
+                zoltempdt[i] = decisionTree(trainfv,testfv,depth)  
+                zoltemprf[i] = randomForest(trainfv,testfv,depth)   
+                zoltempbag[i] = bagging(trainfv,testfv,depth)      
+#                    zoltempsvm[i] = svm(trainfv,testfv)   
+            r = 0    
             avgzoldt[r]  = np.mean(zoltempdt)
             avgzolrf[r] = np.mean(zoltemprf)
             avgzolbag[r] = np.mean(zoltempbag)
+            avgzolsvm[r] = np.mean(zoltempsvm)
               
             stddevzoldt[r]  = np.std(zoltempdt)
             stddevzolrf[r]  = np.std(zoltemprf)
             stddevzolbag[r]  = np.std(zoltempbag)
+            stddevzolsvm[r]  = np.std(zoltempsvm)
             
             stderrzoldt[r] = stddevzoldt[r]/math.sqrt(it)
             stderrzolrf[r] = stddevzolrf[r]/math.sqrt(it)
             stderrzolbag[r] = stddevzolbag[r]/math.sqrt(it)
+            stderrzolsvm[r] = stddevzolsvm[r]/math.sqrt(it)
         
 
         
-        print avgzoldt
-        print avgzolrf
-        print avgzolbag
+            print avgzoldt
+            print avgzolrf
+            print avgzolbag
+#            print avgzolsvm
+            
+            print stddevzoldt
+            print stddevzolrf
+            print stddevzolbag
+#            print stddevzolsvm
+    
+            print stderrzoldt
+            print stderrzolrf
+            print stderrzolbag 
+#            print stderrzolsvm   
+    
+            f = open(self.file,"a+");
+            f.write("\n Depth : " +  str(depth))
+            f.write("\n AVERAGE ZERO ONE LOSS")
+            f.write("\n 1. Decision Tree")
+            f.write(str(avgzoldt))
+            f.write("\n 2. Bagging")
+            f.write(str(avgzolbag))
+            f.write("\n 3. Random forest")
+            f.write(str(avgzolrf))
+#            f.write("\n 4. SVM")
+#            f.write(str(avgzolsvm))
+            
+            f.write("\n STANDARD DEVIATION ZERO ONE LOSS")
+            f.write("\n 1. Decision Tree")
+            f.write(str(stddevzoldt))     
+            f.write("\n 2. Bagging")
+            f.write(str(stddevzolbag))        
+            f.write("\n 3. Random forest")
+            f.write(str(stddevzolrf))        
+#            f.write("\n 4. SVM")
+#            f.write(str(stddevzolsvm))
+            
+            f.write("\n STANDARD ERROR ZERO ONE LOSS")
+            f.write("\n 1. Decision Tree")
+            f.write(str(stderrzoldt))       
+            f.write("\n 2. Bagging")
+            f.write(str(stderrzolbag))        
+            f.write("\n 3. Random forest")
+            f.write(str(stderrzolrf))       
+#            f.write("\n 4. SVM")
+#            f.write(str(stderrzolsvm))
+            f.close();
+            
+            
+    def analysisDriver(self):
         
-        print stddevzoldt
-        print stddevzolrf
-        print stddevzolbag
-
-        print stderrzoldt
-        print stderrzolbag
-        print stderrzolrf   
-
-        f = open(self.file,"a+");
-        f.write("\n AVERAGE ZERO ONE LOSS")
-        f.write("\n 1. Decision Tree")
-        f.write(str(stderrzoldt))
-        f.write("\n 2. Bagging")
-        f.write(str(stderrzolbag))
-        f.write("\n 3. Random forest")
-        f.write(str(stderrzolrf))
+#        ratios1 = [0.025, 0.05, 0.125, 0.25]
+#        words1 = [1000]       
+#        f = open(self.file,"a+")
+#        f.write("\n Analysis 1")
+#        f.close();
+#        self.changeRatioWords(ratios1, words1)
         
-        f.write("\n STANDARD DEVIATION ZERO ONE LOSS")
-        f.write("\n 1. Decision Tree")
-        f.write(str(stddevzoldt))     
-        f.write("\n 2. Bagging")
-        f.write(str(stddevzolbag))        
-        f.write("\n 3. Random forest")
-        f.write(str(stddevzolrf))
+#        ratios2 = [0.25]
+#        words2 = [200, 500, 1000, 1500]
+#        f = open(self.file,"a+")
+#        f.write("\n Analysis 2")
+#        f.close();
+#        self.changeRatioWords(ratios2, words2)
         
-        f.write("\n STANDARD ERROR ZERO ONE LOSS")
-        f.write("\n 1. Decision Tree")
-        f.write(str(stderrzoldt))       
-        f.write("\n 2. Bagging")
-        f.write(str(stderrzolbag))        
-        f.write("\n 3. Random forest")
-        f.write(str(stderrzolrf))
+        
+#        depths = [5,10,15,20]
+        depths = [20]
+        f = open(self.file,"a+")
+        f.write("\n Analysis 3")
         f.close();
-     
+        self.changeDepth(depths)
+        
+#        numTrees = [10,25,50,100]
+#        f = open(self.file,"a+")
+#        f.write("\n Analysis 4")
+#        f.close();        
+#        self.changeNumTrees(numTrees)
+        
+        
+        

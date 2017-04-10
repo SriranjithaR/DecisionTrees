@@ -8,14 +8,13 @@ import numpy as np
 from random import randrange
 from decisionTree import decisionTree, testDT, prediction, giniGain, splitOnFeature, getLeafClass
 
-def randomForest(trainfv, testfv, maxDepth, minRows):
+def randomForest(trainfv, testfv, maxDepth=10, minRows=10,numTrees=50):
         
     train = np.array(trainfv)
     predVals = np.zeros(len(testfv))
     
     totFeatures = len(trainfv[0])-1
     numFeatures = np.sqrt(totFeatures)
-    numTrees = 50
     
     for iter in range(numTrees): # for 50 iterations
         indices = np.random.choice(np.arange(train.shape[0]),train.shape[0])

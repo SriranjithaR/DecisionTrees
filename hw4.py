@@ -69,18 +69,18 @@ minRows = 10;
 
 index = 3
 
-if index == 1:
-    print "ZERO-ONE-LOSS-DT ", decisionTree(trainfv, testfv, maxDepth, minRows)
-elif index == 2 :
-    print "ZERO-ONE-LOSS-BT ", bagging(trainfv, testfv, maxDepth, minRows)
-else:
-    print "ZERO-ONE-LOSS-RF ", randomForest(trainfv, testfv, maxDepth, minRows)
+#if index == 1:
+#    print "ZERO-ONE-LOSS-DT ", decisionTree(trainfv, testfv, maxDepth, minRows)
+#elif index == 2 :
+#    print "ZERO-ONE-LOSS-BT ", bagging(trainfv, testfv, maxDepth, minRows)
+#else:
+#    print "ZERO-ONE-LOSS-RF ", randomForest(trainfv, testfv, maxDepth, minRows)
 
     
-#from analysis_hw4 import analysis    
-#print "Analysis"
-#an = analysis()
-#an.getPlots()
+from analysis_hw4 import analysis    
+print "Analysis"
+an = analysis()
+an.analysisDriver()
 
 #import csv
 #

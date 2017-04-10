@@ -130,18 +130,6 @@ def split(root, maxDepth, minRows, currDepth):
     """
     
     left, right = root['branches']
-#    
-    
-#    l = np.array(left)
-#    r = np.array(right)
-#    
-#    f = root['feature']
-#    l = np.delete(l, f, 1)
-#    r = np.delete(r, f, 1)
-# 
-#    left = l.tolist()
-#    right = r.tolist()
-#    
     del(root['branches'])
     
     # Check if the node is a leaf
