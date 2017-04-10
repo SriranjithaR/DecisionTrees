@@ -295,7 +295,7 @@ class analysis:
 #            print stderrzolsvm   
     
             f = open(self.file,"a+");
-            f.write("\n No. of trees : " +  str(num))
+            f.write("\n\n No. of trees : " +  str(num))
             f.write("\n AVERAGE ZERO ONE LOSS")
 #            f.write("\n 1. Decision Tree")
 #            f.write(str(avgzoldt))
@@ -495,18 +495,17 @@ class analysis:
 #        self.changeRatioWords(ratios2, words2)
         
         
-#        depths = [5,10,15,20]
-        depths = [20]
-        f = open(self.file,"a+")
-        f.write("\n Analysis 3")
-        f.close();
-        self.changeDepth(depths)
-        
-#        numTrees = [10,25,50,100]
+#        depths = [20]
 #        f = open(self.file,"a+")
-#        f.write("\n Analysis 4")
-#        f.close();        
-#        self.changeNumTrees(numTrees)
+#        f.write("\n Analysis 3")
+#        f.close();
+#        self.changeDepth(depths)
+        
+        numTrees = [10,25,50,100]
+        f = open(self.file,"a+")   
+        f.write("\n Analysis 4")
+        f.close();        
+        self.changeNumTrees(numTrees)
         
         
         
