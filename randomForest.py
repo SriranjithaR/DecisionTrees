@@ -67,8 +67,8 @@ def split(root, maxDepth, minRows, numFeatures, currDepth):
         return
         
     # Process left branch
-    print "_________________________________________________________"
-    print "Processing left"
+#    print "_________________________________________________________"
+#    print "Processing left"
     if(len(left) <= minRows):
         root['left'] = getLeafClass(left)
 #        print "len(left) : ",len(left)
@@ -77,8 +77,8 @@ def split(root, maxDepth, minRows, numFeatures, currDepth):
         split(root['left'], maxDepth, minRows, numFeatures, currDepth + 1)
     
     # Process right branch
-    print "_________________________________________________________"
-    print "Processing right"
+#    print "_________________________________________________________"
+#    print "Processing right"
     if(len(right) <= minRows):
         root['right'] = getLeafClass(right)
 #        print "len(right) : ",len(right)

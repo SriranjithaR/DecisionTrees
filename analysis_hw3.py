@@ -6,9 +6,9 @@ from preprocess import splitColumns
 import numpy as np
 from NBCClassifier import featureVector
 from cvFunctions import getTrainData
-from lr import lr
+#from lr import lr
 from svm import svm
-from nbc import nbc
+#from nbc import nbc
 import math
 #from plot import plot
 
@@ -59,7 +59,8 @@ n = len(train)
 #ratios = [0.01,0.03]
 #it = 2
 it = 10
-ratios = [0.01, 0.03, 0.05, 0.08, 0.1, 0.15]
+#ratios = [0.01, 0.03, 0.05, 0.08, 0.1, 0.15]
+ratios = [0.25]
 avgzollr  = [0 for xtemp in range(len(ratios))]
 avgzolsvm = [0 for xtemp in range(len(ratios))]
 avgzolnbc = [0 for xtemp in range(len(ratios))]
@@ -76,7 +77,7 @@ stderrzolnbc = [0 for xtemp in range(len(ratios))]
 testnew = []
 trainnew = []
 
-
+w = 200
 #print "Starting "
 for r in range(len(ratios)):
     print "ration : ",r
@@ -118,13 +119,13 @@ for r in range(len(ratios)):
         wordList = [x for x,_ in words]
         
         # Forming feature vector, calculating Conditional probabilities, applying NBC
-        trainfv, trainfv0, trainfv1  = featureVector(wordList[:4000], x_train, y_train)
-        testfv, testfv0, testfv1 = featureVector(wordList[:4000], x_test, y_test)
+        trainfv, trainfv0, trainfv1  = featureVector(wordList[:w], x_train, y_train)
+        testfv, testfv0, testfv1 = featureVector(wordList[:w], x_test, y_test)
        
     
-        zoltemplr[i]  = lr(trainfv,testfv)  
+#        zoltemplr[i]  = lr(trainfv,testfv)  
         zoltempsvm[i] = svm(trainfv,testfv)   
-        zoltempnbc[i] = nbc(trainfv,testfv)   
+#        zoltempnbc[i] = nbc(trainfv,testfv)   
         
     avgzollr[r]  = np.mean(zoltemplr)
     avgzolsvm[r] = np.mean(zoltempsvm)

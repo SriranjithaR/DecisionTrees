@@ -12,9 +12,9 @@ avgzolrf = [0.29749999999999999, 0.24749999999999997, 0.1565, 0.1725000000000000
 fig = plt.figure()
 
 # use pylab to plot x and y
-dtplot = plt.plot(x, avgzoldt,  'b', label = 'DT Mean')
-bagplot = plt.plot(x, avgzolbag,'g', label = 'BAG Mean')
-rfplot = plt.plot(x, avgzolrf,  'y', label = 'RF Mean')
+#dtplot = plt.plot(x, avgzoldt,  'b', label = 'DT Mean')
+#bagplot = plt.plot(x, avgzolbag,'g', label = 'BAG Mean')
+#rfplot = plt.plot(x, avgzolrf,  'y', label = 'RF Mean')
 
 #STANDARD ERROR ZERO ONE LOSS
 avgstderrdt = [0.019297668252926305, 0.014974144382902147, 0.016309506430300089, 0.014017845768876177]
@@ -26,11 +26,12 @@ plt.title('Analysis 1')
 plt.xlim(0.0,0.3)
 plt.xlabel('training set size in %')
 plt.ylabel('zero-one loss')
-plt.legend(handles = [dtplot[0], bagplot[0], rfplot[0]])
-plt.errorbar(x = x, y = avgzoldt, yerr = avgstderrdt, ecolor='b', capthick=2)
-plt.errorbar(x = x, y = avgzolbag, yerr = avgstderrbag, ecolor='g', capthick=2)
-plt.errorbar(x = x, y = avgzolrf, yerr = avgstderrrf, ecolor='y', capthick=2)
+#plt.legend(handles = [dtplot[0], bagplot[0], rfplot[0]])
+plt.errorbar(x = x, y = avgzoldt, yerr = avgstderrdt, capthick=2, label = 'DT mean')
+plt.errorbar(x = x, y = avgzolbag, yerr = avgstderrbag,  capthick=2, label = 'BAG mean')
+plt.errorbar(x = x, y = avgzolrf, yerr = avgstderrrf,  capthick=2, label = 'RF mean')
 # show the plot on the screen
+plt.legend(loc='upper right')
 plt.show()
 
 
