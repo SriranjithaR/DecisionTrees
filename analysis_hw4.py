@@ -27,7 +27,7 @@ class analysis:
         
 
      
-    def changeRatioWords(self, ratios, words):
+    def changeRatios(self, ratios, words):
         
         # Get data as array
         train = getLines(self.trainData, 100)
@@ -177,6 +177,156 @@ class analysis:
             f.write(str(stderrzolsvm))
             f.close();
     
+   
+    def changeWords(self, ratios, numWords):
+        
+        # Get data as array
+        train = getLines(self.trainData, 100)
+        
+        cv = []         
+        train = np.array(train)
+        np.random.shuffle(train)
+        
+        for i in range(10):
+            cv.append(train[i*200:(i+1)*200])
+        
+        
+        zoltempdt = [0 for xtemp in range(10)]
+        zoltemprf = [0 for xtemp in range(10)]
+        zoltempbag = [0 for xtemp in range(10)]
+        zoltempsvm = [0 for xtemp in range(10)]
+        
+        it = 10
+        
+        avgzoldt  = [0 for xtemp in range(len(numWords))]
+        avgzolrf = [0 for xtemp in range(len(numWords))]
+        avgzolbag = [0 for xtemp in range(len(numWords))]
+        avgzolsvm = [0 for xtemp in range(len(numWords))]
+        
+        stddevzoldt  = [0 for xtemp in range(len(numWords))]
+        stddevzolrf = [0 for xtemp in range(len(numWords))]
+        stddevzolbag = [0 for xtemp in range(len(numWords))]
+        stddevzolsvm = [0 for xtemp in range(len(numWords))]
+        
+        stderrzoldt  = [0 for xtemp in range(len(numWords))]
+        stderrzolrf = [0 for xtemp in range(len(numWords))]
+        stderrzolbag = [0 for xtemp in range(len(numWords))]
+        stderrzolsvm = [0 for xtemp in range(len(numWords))]
+        
+                     
+        testnew = []
+        trainnew = []
+        
+
+
+        for r in range(len(numWords)):
+            
+            for i in range(it):
+                trainnew = []
+                testnew = cv[i]
+        
+                for j in range(it):
+                    if j != i:
+                        for k in range(200):
+                            trainnew.append(cv[j][k])
+
+                temptrain = trainnew
+                trainDataset  = getTrainData(temptrain, ratios[0])
+   
+                
+                
+                rid_train,x_train,y_train = splitColumns(trainDataset);
+                rid_test,x_test,y_test = splitColumns(testnew);
+                
+                # Pre-processing data
+                x_train = preprocess(x_train)
+                x_test = preprocess(x_test)
+                
+                # Creating dictionary from x_train
+                words,wordList = getWordList(x_train)
+                
+                # Removing most frequent 100 words
+                for _ in range(100):
+                    words.pop(0)
+                    
+                wordList = [x for x,_ in words]
+                
+                # Forming feature vector, calculating Conditional probabilities, applying bag
+                trainfv, trainfv0, trainfv1  = featureVector(wordList[:numWords[r]], x_train, y_train)
+                testfv, testfv0, testfv1 = featureVector(wordList[:numWords[r]], x_test, y_test)
+               
+            
+                zoltempdt[i] = decisionTree(trainfv,testfv)  
+                zoltemprf[i] = randomForest(trainfv,testfv)   
+                zoltempbag[i] = bagging(trainfv,testfv)      
+                zoltempsvm[i] = svm(trainfv,testfv)   
+                
+            avgzoldt[r]  = np.mean(zoltempdt)
+            avgzolrf[r] = np.mean(zoltemprf)
+            avgzolbag[r] = np.mean(zoltempbag)
+            avgzolsvm[r] = np.mean(zoltempsvm)
+              
+            stddevzoldt[r]  = np.std(zoltempdt)
+            stddevzolrf[r]  = np.std(zoltemprf)
+            stddevzolbag[r]  = np.std(zoltempbag)
+            stddevzolsvm[r]  = np.std(zoltempsvm)
+            
+            stderrzoldt[r] = stddevzoldt[r]/math.sqrt(it)
+            stderrzolrf[r] = stddevzolrf[r]/math.sqrt(it)
+            stderrzolbag[r] = stddevzolbag[r]/math.sqrt(it)
+            stderrzolsvm[r] = stddevzolsvm[r]/math.sqrt(it)
+        
+
+    
+        print avgzoldt
+        print avgzolrf
+        print avgzolbag
+        print avgzolsvm
+        
+        print stddevzoldt
+        print stddevzolrf
+        print stddevzolbag
+        print stddevzolsvm
+
+        print stderrzoldt
+        print stderrzolrf
+        print stderrzolbag 
+        print stderrzolsvm   
+
+        f = open(self.file,"a+");
+        f.write("\n Ratio : ")
+        f.write(str(ratios[0]))
+        f.write("\n AVERAGE ZERO ONE LOSS")
+        f.write("\n 1. Decision Tree")
+        f.write(str(avgzoldt))
+        f.write("\n 2. Bagging")
+        f.write(str(avgzolbag))
+        f.write("\n 3. Random forest")
+        f.write(str(avgzolrf))
+        f.write("\n 4. SVM")
+        f.write(str(avgzolsvm))
+        
+        f.write("\n STANDARD DEVIATION ZERO ONE LOSS")
+        f.write("\n 1. Decision Tree")
+        f.write(str(stddevzoldt))     
+        f.write("\n 2. Bagging")
+        f.write(str(stddevzolbag))        
+        f.write("\n 3. Random forest")
+        f.write(str(stddevzolrf))        
+        f.write("\n 4. SVM")
+        f.write(str(stddevzolsvm))
+        
+        f.write("\n STANDARD ERROR ZERO ONE LOSS")
+        f.write("\n 1. Decision Tree")
+        f.write(str(stderrzoldt))       
+        f.write("\n 2. Bagging")
+        f.write(str(stderrzolbag))        
+        f.write("\n 3. Random forest")
+        f.write(str(stderrzolrf))       
+        f.write("\n 4. SVM")
+        f.write(str(stderrzolsvm))
+        f.close();
+   
     def changeNumTrees(self, numTrees):
         
         # Get data as array
@@ -485,14 +635,14 @@ class analysis:
 #        f = open(self.file,"a+")
 #        f.write("\n Analysis 1")
 #        f.close();
-#        self.changeRatioWords(ratios1, words1)
+#        self.changeRatios(ratios1, words1)
         
-#        ratios2 = [0.25]
-#        words2 = [200, 500, 1000, 1500]
-#        f = open(self.file,"a+")
-#        f.write("\n Analysis 2")
-#        f.close();
-#        self.changeRatioWords(ratios2, words2)
+        ratios2 = [0.25]
+        words2 = [200, 500, 1000, 1500]
+        f = open(self.file,"a+")
+        f.write("\n Analysis 2")
+        f.close();
+        self.changeWords(ratios2, words2)
         
         
 #        depths = [20]
@@ -501,11 +651,11 @@ class analysis:
 #        f.close();
 #        self.changeDepth(depths)
         
-        numTrees = [10,25,50,100]
-        f = open(self.file,"a+")   
-        f.write("\n Analysis 4")
-        f.close();        
-        self.changeNumTrees(numTrees)
-        
+#        numTrees = [10,25,50,100]
+#        f = open(self.file,"a+")   
+#        f.write("\n Analysis 4")
+#        f.close();        
+#        self.changeNumTrees(numTrees)
+#        
         
         
