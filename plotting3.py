@@ -28,9 +28,9 @@ plt.xlim(0,25)
 plt.xlabel('tree depth')
 plt.ylabel('zero-one loss')
 
-plt.errorbar(x = x, y = avgzoldt, yerr = avgstderrdt,  capthick=2, label = 'DT mean')
-plt.errorbar(x = x, y = avgzolbag, yerr = avgstderrbag, capthick=2, label = 'BAG mean')
-plt.errorbar(x = x, y = avgzolrf, yerr = avgstderrrf,  capthick=2, label = 'RF mean')
+plt.errorbar(x = x, y = avgzoldt, yerr = avgstderrdt,  capsize=3, label = 'DT mean')
+plt.errorbar(x = x, y = avgzolbag, yerr = avgstderrbag, capsize=3, label = 'BAG mean')
+plt.errorbar(x = x, y = avgzolrf, yerr = avgstderrrf,  capsize=3, label = 'RF mean')
 plt.legend(loc='upper right')
 # show the plot on the screen
 plt.show()

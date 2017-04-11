@@ -33,8 +33,8 @@ plt.xlim(0,125)
 plt.xlabel('number of trees')
 plt.ylabel('zero-one loss')
 
-plt.errorbar(x = x, y = avgzolbag, yerr = avgstderrbag, capthick=2, label = 'BAG mean')
-plt.errorbar(x = x, y = avgzolrf, yerr = avgstderrrf,  capthick=2, label = 'RF mean')
+plt.errorbar(x = x, y = avgzolbag, yerr = avgstderrbag, capsize=2, label = 'BAG mean')
+plt.errorbar(x = x, y = avgzolrf, yerr = avgstderrrf,  capsize=2, label = 'RF mean')
 plt.legend(loc='upper right')
 # show the plot on the screen
 plt.show()

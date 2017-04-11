@@ -229,3 +229,39 @@ _____________________________________________________________
  STANDARD ERROR ZERO ONE LOSS
  1. Bagging[0.009402127418834531]
  2. Random forest[0.020881211650668169]
+ RESULTS
+
+_____________________________________________________________
+ Analysis 4
+
+ No. of trees : 25
+ AVERAGE ZERO ONE LOSS
+ 1. Bagging[0.16649999999999998]
+ 2. Random forest[0.17099999999999999]
+ STANDARD DEVIATION ZERO ONE LOSS
+ 1. Bagging[0.049852281793314128]
+ 2. Random forest[0.066700824582609175]
+ STANDARD ERROR ZERO ONE LOSS
+ 1. Bagging[0.015764675702341607]
+ 2. Random forest[0.021092652749239486]
+ RESULTS
+
+
+_____________________________________________________________
+ Analysis 1
+ No. of words : 1000
+ AVERAGE ZERO ONE LOSS
+ 1. Decision Tree[0.0, 0.0, 0.0, 0.0]
+ 2. Bagging[0.0, 0.0, 0.0, 0.0]
+ 3. Random forest[0.0, 0.0, 0.0, 0.0]
+ 4. SVM[0.29450000000000004, 0.16500000000000001, 0.095499999999999974, 0.073499999999999982]
+ STANDARD DEVIATION ZERO ONE LOSS
+ 1. Decision Tree[0.0, 0.0, 0.0, 0.0]
+ 2. Bagging[0.0, 0.0, 0.0, 0.0]
+ 3. Random forest[0.0, 0.0, 0.0, 0.0]
+ 4. SVM[0.088245396480496369, 0.033090784215548584, 0.015074813431681348, 0.018580904176062021]
+ STANDARD ERROR ZERO ONE LOSS
+ 1. Decision Tree[0.0, 0.0, 0.0, 0.0]
+ 2. Bagging[0.0, 0.0, 0.0, 0.0]
+ 3. Random forest[0.0, 0.0, 0.0, 0.0]
+ 4. SVM[0.027905644590297499, 0.010464224768228171, 0.0047670745746212148, 0.0058757978181690276]
