@@ -29,7 +29,7 @@ avgstderrrf = [0.01216141439142668, 0.0096033848199475972, 0.010584186317332094,
 avgstderrbag  = [0.013605146085213493, 0.022978794572387821, 0.016659081607339584, 0.024662218067319091]
 
 plt.title('Analysis 4')
-plt.xlim(0,25)
+plt.xlim(0,125)
 plt.xlabel('number of trees')
 plt.ylabel('zero-one loss')
 
@@ -40,5 +40,5 @@ plt.legend(loc='upper right')
 plt.show()
 
 
-fig.savefig('analysis2.png')
+fig.savefig('analysis4.png')
 

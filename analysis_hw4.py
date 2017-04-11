@@ -581,18 +581,18 @@ class analysis:
 
         
         print avgzoldt
-        print avgzolrf
         print avgzolbag
+        print avgzolrf
 #            print avgzolsvm
         
         print stddevzoldt
-        print stddevzolrf
         print stddevzolbag
+        print stddevzolrf
 #            print stddevzolsvm
 
         print stderrzoldt
-        print stderrzolrf
-        print stderrzolbag 
+        print stderrzolbag
+        print stderrzolrf 
 #            print stderrzolsvm   
 
         f = open(self.file,"a+");
@@ -645,18 +645,19 @@ class analysis:
 #        self.changeWords(ratios2, words2)
         
         
-        depths = [20]
-        f = open(self.file,"a+")
-        f.write("\n Analysis 3")
-        f.close();
-        self.changeDepth(depths)
+#        depths = [10]
+#        f = open(self.file,"a+")
+#        f.write("\n Analysis 3")
+#        f.close();
+#        self.changeDepth(depths)
         
 #        numTrees = [10,25,50,100]
-#        numTrees = [25]
-#        f = open(self.file,"a+")   
-#        f.write("\n Analysis 4")
-#        f.close();        
-#        self.changeNumTrees(numTrees)
-#        
+        numTrees = [25]
+        f = open(self.file,"a+")  
+        f.write("\n_____________________________________________________________");
+        f.write("\n Analysis 4")
+        f.close();        
+        self.changeNumTrees(numTrees)
+        
         
         
