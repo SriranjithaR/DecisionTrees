@@ -630,13 +630,13 @@ class analysis:
     def analysisDriver(self):
         
         
-        ratios1 = [0.025, 0.05, 0.125, 0.25]
-        words1 = [1000]       
-        f = open(self.file,"a+")
-        f.write("\n_____________________________________________________________");
-        f.write("\n Analysis 1")
-        f.close();
-        self.changeRatios(ratios1, words1)
+#        ratios1 = [0.025, 0.05, 0.125, 0.25]
+#        words1 = [1000]       
+#        f = open(self.file,"a+")
+#        f.write("\n_____________________________________________________________");
+#        f.write("\n Analysis 1")
+#        f.close();
+#        self.changeRatios(ratios1, words1)
         
 #        ratios2 = [0.25]
 #        words2 = [200, 500, 1000, 1500]
@@ -647,12 +647,12 @@ class analysis:
 #        self.changeWords(ratios2, words2)
         
         
-#        depths = [5,10,15,20]
-#        f = open(self.file,"a+")
-#        f.write("\n_____________________________________________________________");
-#        f.write("\n Analysis 3")
-#        f.close();
-#        self.changeDepth(depths)
+        depths = [5,10,15,20]
+        f = open(self.file,"a+")
+        f.write("\n_____________________________________________________________");
+        f.write("\n Analysis 3")
+        f.close();
+        self.changeDepth(depths)
         
 #        numTrees = [10,25,50,100]
 ##        numTrees = [25]

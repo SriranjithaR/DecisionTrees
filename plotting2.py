@@ -19,11 +19,6 @@ avgzolsvm = [0.156, 0.087499999999999981, 0.078999999999999987, 0.07299999999999
 
 fig = plt.figure()
 
-## use pylab to plot x and y
-#dtplot  = plt.plot(x, avgzoldt,  'b', label = 'DT Mean')
-#bagplot = plt.plot(x, avgzolbag, 'c', label = 'BAG Mean')
-#rfplot  = plt.plot(x, avgzolrf,  'k', label = 'RF Mean')
-#svmplot = plt.plot(x, avgzolsvm, 'r', label = 'SVM Mean')
 
 #STANDARD ERROR ZERO ONE LOSS
 avgstderrdt  = [0.0075183109805328019, 0.017919263377717286, 0.019959959919799437, 0.0098030607465219716]
@@ -46,25 +41,3 @@ plt.show()
 
 
 fig.savefig('analysis2.png')
-
-
-
-# # Make an array of x values
-# x2 = [10, 50, 250, 500, 1000, 4000]
-# # Make an array of y values for each x value
-# avg2 = [0.33160000000000001, 0.23180000000000001, 0.13340000000000002, 0.090599999999999972, 0.061700000000000012, 0.053400000000000024]
-# std2 = [0.050329315512929441, 0.026029982712249353, 0.017692936443677192, 0.013395521639712294, 0.0093706990134140612, 0.012126005112979274]
-# avg_error2 = [0.47859999999999997, 0.4849, 0.47970000000000007, 0.4803, 0.47799999999999992, 0.47809999999999997]
-# std_error2 = [0.0078128099938498501, 0.0058043087443725846, 0.01049809506529638, 0.013476275449841485, 0.008921883209278194, 0.0059236812878479591]
-#
-# # use pylab to plot x and y
-# avgplot = plt.plot(x2, avg2, 'b', label = 'Mean')
-# stdplot = plt.plot(x2, std2, 'g', label = 'Standard Deviation')
-# avgerrorplot = plt.plot(x2, avg_error2, 'r', label = 'Mean error')
-# stderrorplot = plt.plot(x2, std_error2, 'y', label = 'Standard Deviation in error')
-# plt.title('4(b)')
-# plt.xlabel('zero-one loss')
-# plt.ylabel('feature size')
-# plt.legend(handles = [avgplot[0], stdplot[0], avgerrorplot[0], stderrorplot[0]])
-# # show the plot on the screen
-# plt.show()

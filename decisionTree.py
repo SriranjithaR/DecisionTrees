@@ -8,26 +8,7 @@ import numpy as np
 
 # Find Gini Gain on splitting on that feature
 def giniGain(branches):
-    # TODO :  Code to calculate gini gain
-#    gini = 0.0
-#    for y in [0,1]:
-#        for branch in branches:
-#            size = len(branch)
-#            if size == 0:
-#                continue
-#            proportion = [row[-1] for row in branch].count(y) / float(size)
-#            gini += (proportion * (1.0 - proportion))
-#    return gini
-#    for y in [0,1]:
-#        for branch in branches:
-#            size = len(branch)
-#            if size == 0:
-#                continue
-#            branchnp = np.array(branch)
-#            
-#            proportion = (branchnp[:,-1]).tolist().count(y) / float(size)
-#            gini += (proportion * (1.0 - proportion))
-#    return gini
+
     
     left = branches[0]
     right = branches[1]
