@@ -109,3 +109,7 @@ D = [1,2,3]
 pred = [[D[i]*elt for elt in x[i]] for i in range(3)]
 
 print pred
+
+from decimal import Decimal
+
+print float(Decimal(0.5))*0.5

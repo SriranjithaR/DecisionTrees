@@ -69,13 +69,7 @@ def giniGain(branches):
     
 # Split data on given feature index
 def splitOnFeature(trainfv, f):
-#    d = np.array(trainfv)    
-#    left = d[d[:,f] == 0]
-#    right = d[d[:,f] == 1]
-#    
-#    left.tolist();
-#    right.tolist();
-    
+   
     left, right = list(), list()
     for row in trainfv:
         if row[f] == 0:
@@ -89,40 +83,33 @@ def splitOnFeature(trainfv, f):
     
 # Find the next best feature to split on
 def findNextSplit(trainfv):
-    feat = len(trainfv[0])-1;  # no. of features
-    
+    feat = len(trainfv[0])-1;  # no. of features   
     bestFeat = 0
     bestBranch= [list(), list()]
     minGini = 100
     for f in range(feat):        
         branches = splitOnFeature(trainfv,f)
         gini = giniGain(branches)
-        #print "intermediate gini for feature", f," : ",gini
         if(gini < minGini):
             minGini = gini
             bestFeat = f
-            bestBranch = branches
-            
-#    print "best gini : ", minGini
-#    print "best feature : ", bestFeat
+            bestBranch = branches           
     return {'feature':bestFeat,'branches':bestBranch}
         
     
 # Get the max count class
 def getLeafClass(data):
-#    data = np.array(data)
-#    classLabels = data[:,-1]
     classLabels = [row[-1] for row in data]
     return max(set(classLabels),key=classLabels.count)
-#    return np.bincount(classLabels).argmax()    
+  
     
 # Recursively grow tree
 def split(root, maxDepth, minRows, currDepth):
     
-    print "******************************************"
-    print "Depth : ",currDepth
-    print "Feature : ",root['feature']
-    
+#    print "******************************************"
+#    print "Depth : ",currDepth
+#    print "Feature : ",root['feature']
+#    
     """ 
     root['feature'] => which feature to was used to create root['branches']
     for the next recursive call, this feature has to be removed from the branches
@@ -148,8 +135,8 @@ def split(root, maxDepth, minRows, currDepth):
         return
         
     # Process left branch
-    print "_________________________________________________________"
-    print "Processing left"
+#    print "_________________________________________________________"
+#    print "Processing left"
     if(len(left) <= minRows):
         root['left'] = getLeafClass(left)
 #        print "len(left) : ",len(left)
@@ -158,8 +145,8 @@ def split(root, maxDepth, minRows, currDepth):
         split(root['left'], maxDepth, minRows, currDepth + 1)
     
     # Process right branch
-    print "_________________________________________________________"
-    print "Processing right"
+#    print "_________________________________________________________"
+#    print "Processing right"
     if(len(right) <= minRows):
         root['right'] = getLeafClass(right)
 #        print "len(right) : ",len(right)
@@ -168,18 +155,19 @@ def split(root, maxDepth, minRows, currDepth):
         split(root['right'], maxDepth, minRows, currDepth + 1)
     
         
+        
 # Build DT
 def getTree(trainfv, testfv, maxDepth=10, minRows=10):
     root = findNextSplit(trainfv)
     split(root, maxDepth, minRows, 1) 
     return root
+    
 
 # Driver for decision Tree
 def decisionTree(trainfv, testfv, maxDepth=10, minRows=10):
     tree = getTree(trainfv, testfv, maxDepth, minRows)
     return testDT(tree,testfv)
-    #return root
-    #return root['feature']
+
     
     
 # Calculating accuracy
@@ -208,17 +196,11 @@ def testDT(root,testfv):
 def prediction(root, sample):
     if(sample[root['feature']] == 0):        
         if isinstance(root['left'],dict):
-#            copy = np.array(sample)
-#            copy = np.delete(copy,root['feature'])
-#            return prediction(root['left'],copy.tolist())
             return prediction(root['left'],sample)
         else:
             return root['left']           
     else:       
         if isinstance(root['right'],dict):
-#            copy = np.array(sample)
-#            copy = np.delete(copy,root['feature'])
-#            return prediction(root['right'],copy.tolist())
             return prediction(root['right'],sample)
         else:
             return root['right']

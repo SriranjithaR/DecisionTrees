@@ -14,11 +14,12 @@ import sys
 from decisionTree import decisionTree
 from bagging import bagging
 from randomForest import randomForest
-         
+from boosting import AdaBoost
+
 # Defaults
 trainData = 'Data\yelp_data.csv'
 testData  = 'Data\yelp_data.csv'
-percentage = 50
+percentage = 20
 index = 1
 
 # Deciding training and test set
@@ -60,6 +61,7 @@ wordList = [x for x,_ in words]
  wordList is now a list of the words in desc order of frequency
 """
 # Forming feature vector
+# TODO : change back to 1000
 trainfv, trainfv0, trainfv1  = featureVector(wordList[:1000], x_train, y_train)
 
 testfv, testfv0, testfv1 = featureVector(wordList[:1000], x_test, y_test)
@@ -67,20 +69,23 @@ testfv, testfv0, testfv1 = featureVector(wordList[:1000], x_test, y_test)
 maxDepth = 10;
 minRows = 10;
 
-index = 3
+ab = AdaBoost();
+index = 4
 
-#if index == 1:
-#    print "ZERO-ONE-LOSS-DT ", decisionTree(trainfv, testfv, maxDepth, minRows)
-#elif index == 2 :
-#    print "ZERO-ONE-LOSS-BT ", bagging(trainfv, testfv, maxDepth, minRows)
-#else:
-#    print "ZERO-ONE-LOSS-RF ", randomForest(trainfv, testfv, maxDepth, minRows)
-
+if index == 1:
+    print "ZERO-ONE-LOSS-DT ", decisionTree(trainfv, testfv, maxDepth, minRows)
+elif index == 2 :
+    print "ZERO-ONE-LOSS-BT ", bagging(trainfv, testfv, maxDepth, minRows)
+elif index == 3:
+    print "ZERO-ONE-LOSS-RF ", randomForest(trainfv, testfv, maxDepth, minRows)
+else:
+    print "ZERO-ONE-LOSS-BST", ab.boosting(trainfv, testfv, maxDepth, minRows, 10)
+# TODO : change num trees
     
-from analysis_hw4 import analysis    
-print "Analysis"
-an = analysis()
-an.analysisDriver()
+#from analysis_hw4 import analysis    
+#print "Analysis"
+#an = analysis()
+#an.analysisDriver()
 
 #import csv
 #
