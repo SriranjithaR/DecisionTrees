@@ -345,7 +345,7 @@ class analysis:
         zoltempbag = [0 for xtemp in range(10)]
         zoltempsvm = [0 for xtemp in range(10)]
         
-        ratios = [0.25]
+        ratios = numTrees
         w = 1000
         it = 10
         
@@ -381,7 +381,7 @@ class analysis:
                             trainnew.append(cv[j][k])
 
                 temptrain = trainnew
-                trainDataset  = getTrainData(temptrain, ratios[0])
+                trainDataset  = getTrainData(temptrain, 0.25)
    
                 
                 
@@ -407,8 +407,8 @@ class analysis:
                
             
 #                    zoltempdt[i] = decisionTree(trainfv,testfv)  
-                zoltemprf[i] = randomForest(trainfv,testfv,10,10,num)   
-                zoltempbag[i] = bagging(trainfv,testfv,10,10,num)      
+                zoltemprf[i] = randomForest(trainfv,testfv,10,10,numTrees[r])   
+                zoltempbag[i] = bagging(trainfv,testfv,10,10,numTrees[r])      
 #                    zoltempsvm[i] = svm(trainfv,testfv)   
                 
             avgzoldt[r]  = np.mean(zoltempdt)
@@ -446,7 +446,6 @@ class analysis:
 #            print stderrzolsvm   
 
         f = open(self.file,"a+");
-        f.write("\n\n No. of trees : " +  str(num))
         f.write("\n AVERAGE ZERO ONE LOSS")
 #            f.write("\n 1. Decision Tree")
 #            f.write(str(avgzoldt))
@@ -630,13 +629,13 @@ class analysis:
     def analysisDriver(self):
         
         
-        ratios1 = [0.025, 0.05, 0.125, 0.25]
-        words1 = [1000]       
-        f = open(self.file,"a+")
-        f.write("\n_____________________________________________________________");
-        f.write("\n Analysis 1")
-        f.close();
-        self.changeRatios(ratios1, words1)
+#        ratios1 = [0.025, 0.05, 0.125, 0.25]
+#        words1 = [1000]       
+#        f = open(self.file,"a+")
+#        f.write("\n_____________________________________________________________");
+#        f.write("\n Analysis 1")
+#        f.close();
+#        self.changeRatios(ratios1, words1)
         
 #        ratios2 = [0.25]
 #        words2 = [200, 500, 1000, 1500]
@@ -645,7 +644,7 @@ class analysis:
 #        f.write("\n Analysis 2")
 #        f.close();
 #        self.changeWords(ratios2, words2)
-#        
+##        
 #        
 #        depths = [5,10,15,20]
 #        f = open(self.file,"a+")
@@ -654,13 +653,13 @@ class analysis:
 #        f.close();
 #        self.changeDepth(depths)
 #        
-#        numTrees = [10,25,50,100]
-##        numTrees = [25]
-#        f = open(self.file,"a+")  
-#        f.write("\n_____________________________________________________________");
-#        f.write("\n Analysis 4")
-#        f.close();        
-#        self.changeNumTrees(numTrees)
+        numTrees = [10,25,50,100]
+#        numTrees = [25]
+        f = open(self.file,"a+")  
+        f.write("\n_____________________________________________________________");
+        f.write("\n Analysis 4")
+        f.close();        
+        self.changeNumTrees(numTrees)
 #        
 #        
         

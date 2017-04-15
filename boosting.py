@@ -80,8 +80,12 @@ class AdaBoost:
         yTrain[yTrain == 0] = -1
         yTest[yTest == 0] = -1
              
+        #same
         D = np.ones(nTrain)/nTrain
                    
+        # diff : wt_y missing
+        
+        #same
         for k in range(numTrees):
             
             print "Tree number : ",k
@@ -91,24 +95,28 @@ class AdaBoost:
             
             delta = [int(x) for x in predTrain_k != yTrain]
             
-            mis = [x if x==1 else -1 for x in delta]
+#            mis = [x if x==1 else -1 for x in delta]
+    
+            miss = np.multiply(yTrain,predTrain_k)
             
             e_k = np.dot(D, delta)/ sum(D)
             
             if e_k == 0:
                 break;
                 
-#            a_k = 0.5 * np.log((1.0-e_k)/float(e_k))
-            a_k = 0.5 * float((Decimal((1.0-float(e_k))/float(e_k)).ln()))
-            
-            D = np.multiply(D, np.exp([float(x)*a_k for x in mis]))
+            a_k = 0.5 * np.log((1.0-e_k)/float(e_k))
+#            a_k = 0.5 * float((Decimal((1.0-float(e_k))/float(e_k)).log()))
+#            
+            D = np.multiply(D, np.exp(-1.0 * a_k * miss))
+            D = D/np.sum(D)
             
             predTrain = [sum(x) for x in zip(predTrain,[ x*a_k for x in predTrain_k])]
             predTest = [sum(x) for x in zip(predTest, [x*a_k for x in predTest_k])]
                         
         predTrain, predTest = np.sign(predTrain), np.sign(predTest)     
             
-        correctPred = (predTrain == yTrain).astype(int)
+#        correctPred = (predTrain == yTrain).astype(int)
+        correctPred = (predTest == yTest).astype(int)
 #        for row in trainfv:
 #            if(row[-1]==0):
 #                row[-1] = -1;

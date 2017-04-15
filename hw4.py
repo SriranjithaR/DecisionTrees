@@ -14,8 +14,11 @@ import sys
 from decisionTree import decisionTree
 from bagging import bagging
 from randomForest import randomForest
-from boosting import AdaBoost
+#from boosting import AdaBoost
+#
+#from adaBoost import boosting
 
+from p_boosting import boosting_function
 # Defaults
 trainData = 'Data\yelp_data.csv'
 testData  = 'Data\yelp_data.csv'
@@ -69,23 +72,26 @@ testfv, testfv0, testfv1 = featureVector(wordList[:1000], x_test, y_test)
 maxDepth = 10;
 minRows = 10;
 
-ab = AdaBoost();
-index = 4
-if index == 1:
-    print "ZERO-ONE-LOSS-DT ", decisionTree(trainfv, testfv, maxDepth, minRows)
-elif index == 2 :
-    print "ZERO-ONE-LOSS-BT ", bagging(trainfv, testfv, maxDepth, minRows)
-elif index == 3:
-    print "ZERO-ONE-LOSS-RF ", randomForest(trainfv, testfv, maxDepth, minRows)
-else:
-    print "ZERO-ONE-LOSS-BST", ab.boosting(trainfv, testfv, maxDepth, minRows, 50)
+#ab = AdaBoost();
+#ab = boosting();
+#index = 4
+#if index == 1:
+#    print "ZERO-ONE-LOSS-DT ", decisionTree(trainfv, testfv, maxDepth, minRows)
+#elif index == 2 :
+#    print "ZERO-ONE-LOSS-BT ", bagging(trainfv, testfv, maxDepth, minRows)
+#elif index == 3:
+#    print "ZERO-ONE-LOSS-RF ", randomForest(trainfv, testfv, maxDepth, minRows)
+#else:
+#    print "ZERO-ONE-LOSS-BST", boosting_function(trainfv, testfv, maxDepth=10, minRows=10, numTrees =50)
+
+#    print "ZERO-ONE-LOSS-BST", ab.boosting(trainfv, testfv, maxDepth, minRows, 10)
 # TODO : change num trees
     
-#from analysis_hw4 import analysis    
-#print "Analysis"
-#an = analysis()
-#an.analysisDriver()
-#
+from analysis_hw4 import analysis    
+print "Analysis"
+an = analysis()
+an.analysisDriver()
+
 #import csv
 #
 #with open("temp.csv", "wb") as f:

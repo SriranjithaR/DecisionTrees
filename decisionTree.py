@@ -8,11 +8,10 @@ import numpy as np
 
 # Find Gini Gain on splitting on that feature
 def giniGain(branches):
-
     
     left = branches[0]
     right = branches[1]
-    
+   
     leftGini = 0.0
     rightGini = 0.0
     gini = 0.0
@@ -60,7 +59,6 @@ def splitOnFeature(trainfv, f):
     
     return left, right
     
-
     
 # Find the next best feature to split on
 def findNextSplit(trainfv):

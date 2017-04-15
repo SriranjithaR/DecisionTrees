@@ -104,7 +104,7 @@ sumarr = [retSum(3,num) for num in basearr]
 print basearr
 print sumarr
 
-x = [[10,20,30],[40,50,60],[70,80,90]]
+x = [[10,20,-30],[40,50,-60],[70,80,90]]
 D = [1,2,3]
 pred = [[D[i]*elt for elt in x[i]] for i in range(3)]
 
@@ -113,3 +113,13 @@ print pred
 from decimal import Decimal
 
 print float(Decimal(0.5))*0.5
+import numpy as np           
+l = np.array([-1,-2,-3,4,5,0])
+
+l1 = np.sum(l[l>=0])
+l2 = np.sum(l[l<0])
+
+print l1, l2
+
+l3 = abs(sum([row[-1] for row in x if row[-1]<30]))
+print l3

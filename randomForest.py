@@ -7,7 +7,7 @@ Created on Sat Apr 08 20:48:47 2017
 import numpy as np
 from random import randrange
 from decisionTree import decisionTree, testDT, prediction, giniGain, splitOnFeature, getLeafClass
-
+#from bagging import trainBag 
 def randomForest(trainfv, testfv, maxDepth=10, minRows=10,numTrees=50):
         
     train = np.array(trainfv)
@@ -19,6 +19,7 @@ def randomForest(trainfv, testfv, maxDepth=10, minRows=10,numTrees=50):
     for iter in range(numTrees): # for 50 iterations
         indices = np.random.choice(np.arange(train.shape[0]),train.shape[0])
         trainBag = np.take(train, indices, 0)
+        
         tree = getTree(trainBag.tolist(),testfv, maxDepth, minRows, numFeatures)
         for row in range(len(testfv)):
             pred = prediction(tree,testfv[row])
